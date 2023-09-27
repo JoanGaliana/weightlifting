@@ -5,10 +5,10 @@
   tasks:
   - name: Copy docker files
     copy:
-      src: docker/
+      src: ansible/docker/
       dest: "{{ workdir }}"
 
   - name: Create .env
     template:
-      src: files/.env
+      src: ansible/files/.env
       dest: "{{ workdir }}/.env"
