@@ -11,4 +11,4 @@
   - name: Create docker .env file
     template:
       src: files/docker-env.j2
-      dest: "/srv/owlcms/aa.env"
+      dest: "{{ workdir }}/.env"
