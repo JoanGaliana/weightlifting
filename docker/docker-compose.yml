@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  owlcms:
+    image: owlcms/owlcms
+    environment:
+      - DATABASE_URL=postgres://postgres:example@db:5432/owlcms_db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.owlcms.rule=Host(`wl.joangaliana.com`)"
+      - "traefik.http.routers.owlcms.entrypoints=websecure"      
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: owlcms_db
+              

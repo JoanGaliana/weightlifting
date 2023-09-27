@@ -1,0 +1,27 @@
+name: Deploy to server
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run docker installation playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: playbook.yml
+          key: ${{env.SSH_PRIVATE_KEY}}
+          known_hosts: ${{env.SSH_KNOWN_HOSTS}}
+          directory: ansible
+          inventory: |
+            [all]
+            ${{ env.SSH_HOST }}

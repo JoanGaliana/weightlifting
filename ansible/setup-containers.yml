@@ -1,0 +1,9 @@
+- hosts: all
+  gather_facts: false
+  vars:
+    workdir: /srv/owlcms/
+  tasks:
+  - name: Copy docker files
+    copy:
+      src: docker/
+      dest: {{ workdir }}
