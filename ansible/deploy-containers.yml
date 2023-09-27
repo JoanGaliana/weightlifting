@@ -11,4 +11,4 @@
   - name: Create .env
     template:
       src: files/.env
-      dest: {{ workdir }}/.env
+      dest: "{{ workdir }}/.env"
