@@ -6,7 +6,7 @@
   - name: Copy docker files
     copy:
       src: docker/
-      dest: {{ workdir }}
+      dest: "{{ workdir }}"
 
   - name: Create .env
     template:
