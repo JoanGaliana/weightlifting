@@ -23,3 +23,5 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
           directory: ansible
           inventory: ${{ secrets.INVENTORY }}
+          options: |
+            --extra-vars ${{ secrets.EXTRA_VARS }}

@@ -7,3 +7,8 @@
     copy:
       src: docker/
       dest: {{ workdir }}
+
+  - name: Create .env
+    template:
+      src: files/.env
+      dest: {{ workdir }}/.env

@@ -23,10 +23,10 @@ services:
   owlcms:
     image: owlcms/owlcms
     environment:
-      - DATABASE_URL=postgres://postgres:example@db:5432/owlcms_db
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@db:5432/owlcms_db
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.owlcms.rule=Host(`wl.joangaliana.com`)"
+      - "traefik.http.routers.owlcms.rule=Host(`${OWLCMS_URL}`)"
       - "traefik.http.routers.owlcms.entrypoints=websecure"      
   db:
     image: postgres
@@ -34,6 +34,7 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: owlcms_db
               
