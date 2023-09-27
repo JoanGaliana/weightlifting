@@ -41,10 +41,8 @@
     apt:
       name: docker-compose
       state: latest
-      update_cache: true
 
   - name: Install Docker module for Python
     apt:
       name: python3-docker
       state: latest
-      update_cache: true
