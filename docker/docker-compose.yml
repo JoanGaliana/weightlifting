@@ -5,7 +5,7 @@ services:
     image: "traefik:v2.10"
     container_name: "traefik"
     command:
-      #- "--log.level=DEBUG"
+      - "--log.level=DEBUG"
       - "--api.insecure=false"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
@@ -14,10 +14,15 @@ services:
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
       - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=postmaster@example.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme"
+
     ports:
       - "80:80"
       - "443:443"
     volumes:
+      - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
   owlcms:
@@ -28,6 +33,9 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.owlcms.rule=Host(`${OWLCMS_URL}`)"
       - "traefik.http.routers.owlcms.entrypoints=websecure"      
+      - "traefik.http.routers.owlcms.loadbalancer.server.port=8080"
+      - "traefik.http.routers.whoami.tls.certresolver=letsencrypt"
+      
   db:
     image: postgres
     restart: always
