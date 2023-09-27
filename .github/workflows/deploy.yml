@@ -15,12 +15,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup known hosts
+        uses: kielabokkie/ssh-key-and-known-hosts-action@v1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-host: ${{ secrets.SSH_HOST }}
+
       - name: Run docker installation playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
           playbook: setup-docker.yml
-          key: ${{env.SSH_PRIVATE_KEY}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
           directory: ansible
           inventory: |
             [all]
-            ${{ env.SSH_HOST }}
+            ${{ secrets.SSH_HOST }}
