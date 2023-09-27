@@ -39,6 +39,6 @@
 
   - name: Install Docker module for Python
     apt:
-      name: python-docker
+      name: python3-docker
       state: latest
       update_cache: true
