@@ -1,12 +1,12 @@
 - hosts: all
   gather_facts: false
   vars:
-    workdir: /srv/owlcms/
+    workdir: /srv/owlcms
   tasks:
   - name: Copy docker files
     copy:
       src: ../docker/
-      dest: "{{ workdir }}"
+      dest: "{{ workdir }}/"
 
   - name: Create .env
     template:
