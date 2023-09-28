@@ -6,17 +6,20 @@ services:
     container_name: "traefik"
     command:
       - "--log.level=DEBUG"
-      - "--api.insecure=false"
+      
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+
       - "--entrypoints.websecure.address=:443"
+
       - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
-      - "--certificatesresolvers.letsencrypt.acme.email=postmaster@example.com"
-      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme"
+      - "--certificatesresolvers.letsencrypt.acme.email=${CERTIFICATE_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
 
     ports:
       - "80:80"
@@ -32,9 +35,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.owlcms.rule=Host(`${OWLCMS_URL}`)"
-      - "traefik.http.routers.owlcms.entrypoints=websecure"      
-      - "traefik.http.routers.owlcms.loadbalancer.server.port=8080"
-      - "traefik.http.routers.whoami.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.owlcms.entrypoints=websecure"
+      - "traefik.http.routers.owlcms.tls=true"
+      - "traefik.http.routers.owlcms.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.owlcms.tls.domains[0].main=${OWLCMS_URL}"
+      - "traefik.http.routers.owlcms.service=owlcmService"
+      - "traefik.http.services.owlcmService.loadBalancer.server.port=8080"
       
   db:
     image: postgres
