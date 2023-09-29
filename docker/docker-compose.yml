@@ -3,6 +3,7 @@ version: '3.4'
 services:
   traefik:
     image: "traefik:v2.10"
+    restart: always
     container_name: "traefik"
     command:
       - "--log.level=DEBUG"
@@ -30,6 +31,7 @@ services:
 
   owlcms:
     image: owlcms/owlcms
+    restart: always
     environment:
       - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@db:5432/owlcms_db
     labels:
